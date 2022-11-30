@@ -3,7 +3,7 @@ from . import views
 from rest_framework_simplejwt.views import TokenRefreshView
 # from account.views import send_mail
 
-# http://127.0.0.1:8000/accounts
+
 urlpatterns = [
     path('', views.UserListView.as_view()),
     path('register/', views.RegistrationView.as_view()),

@@ -21,7 +21,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'password2', 'last_name', 'first_name', 'username')
+        fields = ('email', 'password', 'password2', 'username')
 
     def validate(self, attrs):
         password2 = attrs.pop('password2')
@@ -32,8 +32,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        owner = User.objects.create_user(**validated_data)
-        return owner
+        user = User.objects.create_user(**validated_data)
+        user.create_activation_code()
+        return user
 
 
 class LogoutSerializer(serializers.Serializer):

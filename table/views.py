@@ -6,23 +6,16 @@ from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
-from .models import Storage
-from .serializers import StorageListSerializer, StorageCreateSerializer
+from .models import Advert
+from .serializers import AdvertListSerializer, AdvertCreateSerializer
 from django_filters import rest_framework as rest_filter
 
 from .permissions import IsOwner
 
 
-
-
-class StorageViewSet(mixins.CreateModelMixin,
-                   mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin,
-                   mixins.DestroyModelMixin,
-                   mixins.ListModelMixin,
-                   GenericViewSet):
-    queryset = Storage.objects.all()
-    serializer_class = StorageListSerializer
+class StorageViewSet(GenericViewSet):
+    queryset = Advert.objects.all()
+    serializer_class = AdvertListSerializer
     filter_backends = [filters.SearchFilter,
     rest_filter.DjangoFilterBackend,
     filters.OrderingFilter]
@@ -37,29 +30,25 @@ class StorageViewSet(mixins.CreateModelMixin,
 
     def get_serializer_class(self):
         if self.action == 'list':
-            return StorageListSerializer
+            return AdvertListSerializer
         elif self.action == 'create':
-            return StorageCreateSerializer
+            return AdvertCreateSerializer
         return super().get_serializer_class()
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
             self.permission_classes = [AllowAny]
-        if self.action in ['destroy', 'update', 'partial_update']:
+        if self.action in ['destroy', 'update']:
             self.permission_classes = [IsOwner]
         return super().get_permissions()
 
 
-# class ProductViewSet(ModelViewSet):
-#     queryset = Product.objects.filter(in_stock=True)
-# product.object.filter(in_stock=True)
-
-
 class FindViewSet(ListAPIView):
-    queryset = Storage.objects.filter(storage='find')
-    serializer_class = StorageListSerializer
+    queryset = Advert.objects.filter(type='find')
+    serializer_class = AdvertListSerializer
 
 
 class LostViewSet(ListAPIView):
-    queryset = Storage.objects.filter(storage='lost')
-    serializer_class = StorageListSerializer
+    queryset = Advert.objects.filter(type='lost')
+    serializer_class = AdvertListSerializer
+

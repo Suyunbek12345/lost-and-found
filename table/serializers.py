@@ -1,12 +1,12 @@
 from rest_framework import serializers
 
-from .models import Storage
+from .models import Advert, Comment
 
 
-class StorageListSerializer(serializers.ModelSerializer):
+class AdvertListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Storage
-        fields = ('storage', 'user', 'title', 'image', 'status', 'category', 'address', 'date')
+        model = Advert
+        fields = ('advert', 'user', 'title', 'image', 'status', 'category', 'address', 'date')
 
 
 # class StorageSerializer(serializers.ModelSerializer):
@@ -17,24 +17,31 @@ class StorageListSerializer(serializers.ModelSerializer):
 #         fields = ('storage','user', 'title', 'image', 'status', 'text', 'category', 'address', 'date' )
 
 
-class StorageImageSerializer(serializers.ModelSerializer):
+class AdvertImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Storage
+        model = Advert
         fields = 'image',
 
 
-class StorageCreateSerializer(serializers.ModelSerializer):
+class AdvertCreateSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(
         default=serializers.CurrentUserDefault(),
         source='user.username'
     )
 
     class Meta:
-        model = Storage
+        model = Advert
         fields = '__all__'
 
 
     def create(self, validated_data):
-        post = Storage.objects.create(**validated_data)
+        post = Advert.objects.create(**validated_data)
         return post
+
+class CommentSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+
+    class Meta:
+        model = Comment
+        fields = ('id', 'body', 'advert', 'owner')
 

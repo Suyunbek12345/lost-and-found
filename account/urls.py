@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from account import views
 from rest_framework_simplejwt.views import TokenRefreshView
 # from account.views import send_mail
 

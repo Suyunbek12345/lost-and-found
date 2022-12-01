@@ -31,9 +31,10 @@ class UserManager(BaseUserManager):
 
 class CustomUser(AbstractUser):
     email = models.EmailField('email address', unique=True)
-    password = models.CharField(max_length=100)
-    password2 = models.CharField(max_length=100)
-    username = models.CharField(max_length=100, unique=True)
+    password = models.CharField(max_length=200)
+    password2 = models.CharField(max_length=200)
+    username = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='users')
     activation_code = models.CharField(max_length=255, blank=True)
     is_active = models.BooleanField(_('active'), default=False, help_text=_(
         'Designates whether this user should be treated as active.'
@@ -41,7 +42,7 @@ class CustomUser(AbstractUser):
     ))
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
 
     objects = UserManager()
 

@@ -13,7 +13,7 @@ CHOICES = (
         ('find', 'Нашел')
     )
 
-class Storage(models.Model):
+class Advert(models.Model):
 
     type = models.CharField(max_length=50, choices=CHOICES)
 
@@ -23,15 +23,6 @@ class Storage(models.Model):
         on_delete=models.CASCADE,
         related_name='publication'
     )
-
-    slug = models.SlugField(max_length=170, primary_key=True)
-    title = models.CharField(max_length=200, null=False)
-    name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
-    number = models.CharField(max_length=13)
-    image = models.ImageField(upload_to='images', null=True, blank=True)
-
-
     CATEGORY_CHOICES = (
         ('documents', 'Документ'),
         ('keys', 'Ключи'),
@@ -44,6 +35,20 @@ class Storage(models.Model):
 
     )
 
+    slug = models.SlugField(max_length=100, primary_key=True)
+    category = models.CharField(
+        max_length=100,
+        choices=CATEGORY_CHOICES
+    )
+    title = models.CharField(max_length=200, null=False)
+    name = models.CharField(max_length=150)
+    last_name = models.CharField(max_length=150)
+    number = models.CharField(max_length=13)
+    image = models.ImageField(upload_to='images', null=True, blank=True)
+
+
+
+
     ADDRESS_CHOICES = (
         ('Balykchy', 'Балыкчы'),
         ('Bishkek', 'Бишкек'),
@@ -54,11 +59,6 @@ class Storage(models.Model):
         ('Talas', 'Талас'),
         ('Tokmok', 'Токмок'),
 
-    )
-
-    category = models.CharField(
-        max_length=100,
-        choices=CATEGORY_CHOICES
     )
 
     address = models.CharField(max_length=100, choices=ADDRESS_CHOICES)
@@ -78,6 +78,19 @@ class Storage(models.Model):
 
     class Meta:
         ordering = ('created_at',)
+
+class Comment(models.Model):
+    owner = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
+    advert = models.ForeignKey(Advert, related_name='comments', on_delete=models.CASCADE)
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.owner} -> {self.book} -> {self.created_at}'
+
+    class Meta:
+        verbose_name = 'Comment'
+        verbose_name_plural = 'Comments'
 
     def get_absolute_url(self):
         return reverse("post-detail", kwargs={"pk": self.pk})

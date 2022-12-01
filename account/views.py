@@ -22,7 +22,7 @@ class RegistrationView(APIView):
             user = serializer.save()
             if user:
                 send_confirmation_email(user.email, user.activation_code)
-            return Response(serializer.data, status=201)
+            return Response('Successfully registered!', status=201)
         return Response('Bad request!', status=400)
 
 

@@ -6,7 +6,7 @@ from .models import Advert, Comment
 class AdvertListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advert
-        fields = ('advert', 'user', 'title', 'image', 'status', 'category', 'address', 'date')
+        fields = ('advert', 'user', 'title', 'image', 'status', 'address', 'date')
 
 
 # class StorageSerializer(serializers.ModelSerializer):
@@ -32,6 +32,18 @@ class AdvertCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advert
         fields = '__all__'
+
+    def validate(self, attrs):
+        a = self._context['request']
+        if "+996" not in a.phone:
+            raise serializers.ValidationError(
+                'Your number is not from Kyrgyzstan! Salamalekym! Davay brat menyi! Change your number'
+            )
+        if len(a.slug) < 8:
+            raise serializers.ValidationError(
+                'As`salam Aleikym. Please, po bratske write minimum 8 symbols.'
+            )
+        return attrs
 
 
     def create(self, validated_data):

@@ -1,21 +1,17 @@
-
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from django_admin_geomap import GeoItem
 
-from slugify import slugify
+from category.models import Category
 
 
 User = get_user_model()
 
-CHOICES = (
-        ('lost', 'Потерял'),
-        ('find', 'Нашел')
-    )
 
 class Advert(models.Model):
 
-    type = models.CharField(max_length=50, choices=CHOICES)
+    type = models.CharField(max_length=50)
 
     user = models.ForeignKey(
         verbose_name='Автор поста',
@@ -23,45 +19,14 @@ class Advert(models.Model):
         on_delete=models.CASCADE,
         related_name='publication'
     )
-    CATEGORY_CHOICES = (
-        ('documents', 'Документ'),
-        ('keys', 'Ключи'),
-        ('electronik', 'электроника'),
-        ('animals', 'Животные'),
-        ('jewelry', 'Драгоценности'),
-        ('bags', 'Сумки'),
-        ('phones', 'телефоны'),
-        ('other', 'Другое'),
 
-    )
-
-    slug = models.SlugField(max_length=100, primary_key=True)
-    category = models.CharField(
-        max_length=100,
-        choices=CATEGORY_CHOICES
-    )
     title = models.CharField(max_length=200, null=False)
     name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
-    number = models.CharField(max_length=13)
+    phone = models.CharField(max_length=9)
     image = models.ImageField(upload_to='images', null=True, blank=True)
-
-
-
-
-    ADDRESS_CHOICES = (
-        ('Balykchy', 'Балыкчы'),
-        ('Bishkek', 'Бишкек'),
-        ('Kant', 'Кант'),
-        ('Karakol', 'Каракол'),
-        ('Naryn', 'Нарын'),
-        ('Osh', 'Ош'),
-        ('Talas', 'Талас'),
-        ('Tokmok', 'Токмок'),
-
-    )
-
-    address = models.CharField(max_length=100, choices=ADDRESS_CHOICES)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    address = models.CharField(max_length=100)
     whatsapp = models.CharField(max_length=13, null=True, blank=True)
     date = models.DateField(verbose_name='Дата находки')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -70,14 +35,12 @@ class Advert(models.Model):
     def __str__(self) -> str:
         return self.title
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
-
-        super().save(*args, **kwargs)
-
     class Meta:
         ordering = ('created_at',)
+
+    def get_absolute_url(self):
+        return reverse("post-detail", kwargs={"pk": self.pk})
+
 
 class Comment(models.Model):
     owner = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
@@ -86,13 +49,21 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.owner} -> {self.book} -> {self.created_at}'
+        return f'{self.owner} -> {self.advert} -> {self.created_at}'
 
     class Meta:
         verbose_name = 'Comment'
         verbose_name_plural = 'Comments'
 
-    def get_absolute_url(self):
-        return reverse("post-detail", kwargs={"pk": self.pk})
 
+
+class Location(models.Model, GeoItem):
+
+    @property
+    def geomap_longitude(self):
+        return "<strong>{}</strong>".format(str(self))
+
+    @property
+    def geomap_latitude(self):
+        return self.geomap_popup_view
 

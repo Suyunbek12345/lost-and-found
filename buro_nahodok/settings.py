@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     # my_apps
     'account',
     'table',
+    'category',
 
 ]
 
@@ -56,7 +57,7 @@ ROOT_URLCONF = 'buro_nahodok.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['path/to/installed/django_admin_geomap/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

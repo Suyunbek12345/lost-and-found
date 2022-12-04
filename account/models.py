@@ -7,32 +7,36 @@ from django.utils.translation import gettext_lazy as _
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
-    def create_user(self, email, password, **kwargs):
+    def _create_user(self, email, password, **kwargs):
         if not email:
             return ValueError('The given email must be set!')
         email = self.normalize_email(email=email)
         user = self.model(email=email, **kwargs)
-        user.set_password(password)
         user.create_activation_code()
+        user.set_password(password)
         user.save(using=self._db)
         return user
 
+    def create_user(self, email, password=None, **kwargs):
+        kwargs.setdefault('is_staff', False)
+        kwargs.setdefault('is_superuser', False)
+        return self._create_user(email, password, **kwargs)
 
     def create_superuser(self, email, password, **kwargs):
-        email = self.normalize_email(email=email)
-        user = self.model(email=email, **kwargs)
-        user.set_password(password)
-        user.is_active = True
-        user.is_staff = True
-        user.is_superuser = True
-        user.save(using=self._db)
-        return user
+        kwargs.setdefault('is_staff', True)
+        kwargs.setdefault('is_superuser', True)
+        kwargs.setdefault('is_active', True)
+        if kwargs.get('is_staff') is not True:
+            raise ValueError('Superuser must have status is_stuff=True!')
+        if kwargs.get('is_staff') is not True:
+            raise ValueError('Superuser must have status is_superuser=True!')
+        return self._create_user(email, password, **kwargs)
+
 
 
 class CustomUser(AbstractUser):
     email = models.EmailField('email address', unique=True)
     password = models.CharField(max_length=200)
-    password2 = models.CharField(max_length=200)
     username = models.CharField(max_length=100)
     image = models.ImageField(upload_to='users')
     activation_code = models.CharField(max_length=255, blank=True)
@@ -42,7 +46,7 @@ class CustomUser(AbstractUser):
     ))
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = []
 
     objects = UserManager()
 

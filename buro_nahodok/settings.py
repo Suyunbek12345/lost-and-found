@@ -57,7 +57,7 @@ ROOT_URLCONF = 'buro_nahodok.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['path/to/installed/django_admin_geomap/templates'],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -151,7 +151,9 @@ REST_FRAMEWORK = {
        'rest_framework.authentication.TokenAuthentication',
    ),
    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAdminUser'
+       'rest_framework.permissions.IsAuthenticated',
+       'rest_framework.permissions.IsAdminUser',
+       'rest_framework.permissions.AllowAny',
    ),
 }
 

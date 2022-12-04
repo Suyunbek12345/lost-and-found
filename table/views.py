@@ -1,4 +1,3 @@
-
 from rest_framework.viewsets import mixins, GenericViewSet
 from rest_framework import filters, status
 from rest_framework.permissions import AllowAny
@@ -9,8 +8,7 @@ from rest_framework.response import Response
 from .models import Advert
 from .serializers import AdvertListSerializer, AdvertCreateSerializer
 from django_filters import rest_framework as rest_filter
-
-from .permissions import IsOwner
+from rest_framework.permissions import IsAuthenticated
 
 
 class StorageViewSet(GenericViewSet):
@@ -31,15 +29,13 @@ class StorageViewSet(GenericViewSet):
     def get_serializer_class(self):
         if self.action == 'list':
             return AdvertListSerializer
-        elif self.action == 'create':
-            return AdvertCreateSerializer
         return super().get_serializer_class()
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
             self.permission_classes = [AllowAny]
-        if self.action in ['destroy', 'update']:
-            self.permission_classes = [IsOwner]
+        if self.action in ['create', 'destroy', 'update']:
+            self.permission_classes = [IsAuthenticated]
         return super().get_permissions()
 
 

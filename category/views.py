@@ -9,7 +9,8 @@ class CategoryViewSet(ModelViewSet):
     serializer_class = serializers.CategorySerializer
 
     def get_permissions(self):
-        if self.action in ('retrieve', 'list'):
-            return [permissions.AllowAny()]
-        else:
+        if self.action in ('delete', 'put'):
             return [permissions.IsAdminUser()]
+        else:
+            return [permissions.AllowAny()]
+

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from table.models import Advert, Comment, Location
+from table.models import Advert, Comment, Favorites
 from django_admin_geomap import ModelAdmin
 # Register your models here.
 
@@ -11,4 +11,6 @@ from django_admin_geomap import ModelAdmin
 
 admin.site.register(Advert)
 admin.site.register(Comment)
-admin.site.register(Location)
+# admin.site.register(Location)
+admin.site.register(Favorites)
+

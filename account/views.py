@@ -8,7 +8,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from . import serializers
 from .send_email import send_confirmation_email, send_code_password_reset
-
+from rest_framework.permissions import IsAuthenticated
 
 User = get_user_model()
 
@@ -22,7 +22,7 @@ class RegistrationView(APIView):
             user = serializer.save()
             if user:
                 send_confirmation_email(user.email, user.activation_code)
-            return Response('Successfully registered!', status=201)
+            return Response('Successfully registered! Check your gmail!', status=201)
         return Response('Bad request!', status=400)
 
 

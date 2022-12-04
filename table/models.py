@@ -23,11 +23,11 @@ class Advert(models.Model):
     title = models.CharField(max_length=200, null=False)
     name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
-    phone = models.CharField(max_length=9)
-    image = models.ImageField(upload_to='images', null=True, blank=True)
+    phone = models.CharField(max_length=13)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    address = models.CharField(max_length=100)
+    address = models.CharField(max_length=200)
     whatsapp = models.CharField(max_length=13, null=True, blank=True)
+    image = models.FileField(upload_to='images')
     date = models.DateField(verbose_name='Дата находки')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -40,6 +40,14 @@ class Advert(models.Model):
 
     def get_absolute_url(self):
         return reverse("post-detail", kwargs={"pk": self.pk})
+
+
+class Favorites(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
+    advert = models.ForeignKey(Advert, on_delete=models.CASCADE, related_name='favorites')
+
+    class Meta:
+        unique_together = ['owner', 'advert']
 
 
 class Comment(models.Model):
@@ -57,13 +65,13 @@ class Comment(models.Model):
 
 
 
-class Location(models.Model, GeoItem):
-
-    @property
-    def geomap_longitude(self):
-        return "<strong>{}</strong>".format(str(self))
-
-    @property
-    def geomap_latitude(self):
-        return self.geomap_popup_view
-
+# class Location(models.Model, GeoItem):
+#
+#     @property
+#     def geomap_longitude(self):
+#         return "<strong>{}</strong>".format(str(self))
+#
+#     @property
+#     def geomap_latitude(self):
+#         return self.geomap_popup_view
+#

@@ -36,5 +36,5 @@ urlpatterns = [
     path('api/v1/table/', include('table.urls')),
     # path('api/v1/category', include('category')),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
+]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

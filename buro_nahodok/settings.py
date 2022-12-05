@@ -139,12 +139,12 @@ AUTH_USER_MODEL = 'account.CustomUser'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_BACKENDS = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_PORT = config('EMAIL_PORT', default=587)
-EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config('EMAIL_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')
-EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
 
 REST_FRAMEWORK = {
    'DEFAULT_AUTHENTICATION_CLASSES': (

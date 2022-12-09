@@ -1,34 +1,27 @@
 from rest_framework import serializers
 
+from category.models import Category
 from .models import Advert, Comment, Favorites
 
 
 class AdvertListSerializer(serializers.ModelSerializer):
+    # created_at = serializers.DateTimeField(format='%d/%m/%Y %H:%M:%S')
     class Meta:
         model = Advert
-        fields = ('user', 'title', 'category', 'date')
+        fields = ('id', 'user', 'title', 'description', 'name', 'last_name', 'category', 'address', 'whatsapp')
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['images'] = instance.images.all()
 
 
-
-class AdvertImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Advert
-        fields = 'image',
-
-
-class AdvertCreateSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(
-        default=serializers.CurrentUserDefault(),
-        source='user.username'
-    )
+class AdvertDetailSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source='user.email')
+    category = serializers.PrimaryKeyRelatedField(required=True, queryset=Category.objects.all())
 
     class Meta:
         model = Advert
         fields = '__all__'
-
-    def create(self, validated_data):
-        post = Advert.objects.create(**validated_data)
-        return post
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -49,17 +42,3 @@ class FavoritesSerializer(serializers.ModelSerializer):
         repr['advert'] = AdvertListSerializer(instance.post).data
         return repr
 
-
-
-
-   # def validate(self, attrs):
-    #     a = self._context['request']
-    #     if "+996" not in a.phone:
-    #         raise serializers.ValidationError(
-    #             'Your number is not from Kyrgyzstan! Salamalekym! Davay brat menyi! Change your number'
-    #         )
-    #     if len(a.slug) < 8:
-    #         raise serializers.ValidationError(
-    #             'As`salam Aleikym. Please, po bratske write minimum 8 symbols.'
-    #         )
-    #     return attrs

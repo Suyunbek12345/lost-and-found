@@ -2,14 +2,18 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include, re_path
-from rest_framework.routers import SimpleRouter
+from rest_framework.routers import SimpleRouter, DefaultRouter
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
+from table.views import AdvertViewSet
 
 from category.views import CategoryViewSet
 
-router = SimpleRouter()
+# from category.views import CategoryViewSet
+
+router = DefaultRouter()
+router.register('advert', AdvertViewSet)
 router.register('categories', CategoryViewSet)
 
 
@@ -29,10 +33,10 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('admin/', admin.site.urls),
-    path('api-auth', include('rest_framework.urls')),
+    path('api', include('rest_framework.urls')),
     path('api/v1/', include(router.urls)),
     path('api/v1/accounts/', include('account.urls')),
-    path('api/v1/table/', include('table.urls')),
+    # path('api/v1/table/', include('table.urls')),
     # path('api/v1/category', include('category')),
 
 ]

@@ -1,7 +1,5 @@
-from django.db import models
 from django.contrib.auth import get_user_model
-from django.urls import reverse
-from django_admin_geomap import GeoItem
+from django.db import models
 
 from category.models import Category
 
@@ -17,29 +15,23 @@ class Advert(models.Model):
         verbose_name='Автор поста',
         to=User,
         on_delete=models.CASCADE,
-        related_name='publication'
+        related_name='publication',
     )
 
-    title = models.CharField(max_length=200, null=False)
+    title = models.CharField(max_length=200)
+    description = models.TextField()
     name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
-    phone = models.CharField(max_length=13)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    phone = models.IntegerField(null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
     address = models.CharField(max_length=200)
     whatsapp = models.CharField(max_length=13, null=True, blank=True)
-    image = models.FileField(upload_to='images')
-    date = models.DateField(verbose_name='Дата находки')
+    image = models.ImageField(upload_to='images')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.title
-
-    class Meta:
-        ordering = ('created_at',)
-
-    def get_absolute_url(self):
-        return reverse("post-detail", kwargs={"pk": self.pk})
 
 
 class Favorites(models.Model):
@@ -62,6 +54,12 @@ class Comment(models.Model):
     class Meta:
         verbose_name = 'Comment'
         verbose_name_plural = 'Comments'
+
+
+
+
+
+
 
 
 

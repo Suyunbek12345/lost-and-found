@@ -17,10 +17,11 @@ class Advert(models.Model):
     type = models.CharField(max_length=200, choices=CHOISES_TYPE)
 
     user = models.ForeignKey(
+        User,
         verbose_name='Автор поста',
-        to=User,
         on_delete=models.CASCADE,
         related_name='publication',
+        null=True
     )
 
     title = models.CharField(max_length=200)

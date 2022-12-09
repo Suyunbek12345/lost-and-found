@@ -9,7 +9,12 @@ User = get_user_model()
 
 class Advert(models.Model):
 
-    type = models.CharField(max_length=50)
+    CHOISES_TYPE = (
+        ('find', 'найдено'),
+        ('lost', 'потеряно')
+    )
+
+    type = models.CharField(max_length=200, choices=CHOISES_TYPE)
 
     user = models.ForeignKey(
         verbose_name='Автор поста',
@@ -22,7 +27,7 @@ class Advert(models.Model):
     description = models.TextField()
     name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
-    phone = models.IntegerField(null=True)
+    phone = models.IntegerField(null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
     address = models.CharField(max_length=200)
     whatsapp = models.CharField(max_length=13, null=True, blank=True)
@@ -54,13 +59,6 @@ class Comment(models.Model):
     class Meta:
         verbose_name = 'Comment'
         verbose_name_plural = 'Comments'
-
-
-
-
-
-
-
 
 
 # class Location(models.Model, GeoItem):

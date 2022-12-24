@@ -5,7 +5,7 @@ from .models import Advert, Comment, Favorites
 
 
 class AdvertListSerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source='owner.email')
+    user = serializers.ReadOnlyField(source='user.email')
 
     class Meta:
         model = Advert

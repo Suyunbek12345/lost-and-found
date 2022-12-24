@@ -36,6 +36,7 @@ urlpatterns = [
     path('api', include('rest_framework.urls')),
     path('api/v1/', include(router.urls)),
     path('api/v1/accounts/', include('account.urls')),
+    # path('api/v1/apps/', include('chatapp.urls'))
     # path('api/v1/table/', include('table.urls')),
     # path('api/v1/category', include('category')),
 

@@ -8,11 +8,11 @@ class AdvertListSerializer(serializers.ModelSerializer):
     # created_at = serializers.DateTimeField(format='%d/%m/%Y %H:%M:%S')
     class Meta:
         model = Advert
-        fields = ('id', 'user', 'title', 'description', 'name', 'last_name', 'category', 'address', 'whatsapp')
+        fields = ('id', 'user', 'title', 'description', 'address')
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['images'] = instance.images.all()
+        representation['image'] = instance.image.all()
 
 
 class AdvertDetailSerializer(serializers.ModelSerializer):

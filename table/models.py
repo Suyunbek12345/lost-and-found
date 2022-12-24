@@ -26,8 +26,6 @@ class Advert(models.Model):
 
     title = models.CharField(max_length=200)
     description = models.TextField()
-    name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
     phone = models.IntegerField(null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
     address = models.CharField(max_length=200)

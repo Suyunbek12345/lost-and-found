@@ -18,7 +18,8 @@ SECRET_KEY = config('SECRET')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*').split(', ')
+# ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*').split(',')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(' ')
 
 
 # Application definition
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     # my_apps
     'account',
     'category',
+    # 'chatapp',
     'table',
 
 ]
@@ -140,6 +142,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:8080",
+    "http://127.0.0.1:8000",
+    "http://127.0.0.1:3000",
     "http://localhost:3000",
     "http://3.87.153.165",
 ]
@@ -224,9 +228,9 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=60),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
-
-REDIS_HOST = '127.0.0.1'
-REDIS_PORT = '6379'
+#
+# REDIS_HOST = '127.0.0.1'
+# REDIS_PORT = '6379'
 
 
 

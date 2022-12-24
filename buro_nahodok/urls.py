@@ -13,7 +13,7 @@ from category.views import CategoryViewSet
 # from category.views import CategoryViewSet
 
 router = DefaultRouter()
-router.register('advert', AdvertViewSet)
+router.register('adverts', AdvertViewSet)
 router.register('categories', CategoryViewSet)
 
 

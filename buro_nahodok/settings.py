@@ -18,8 +18,8 @@ SECRET_KEY = config('SECRET')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*').split(',')
-ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(' ')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*').split(',')
+# ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(' ')
 
 
 # Application definition
@@ -229,8 +229,8 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 #
-# REDIS_HOST = '127.0.0.1'
-# REDIS_PORT = '6379'
+REDIS_HOST = '127.0.0.1'
+REDIS_PORT = '6379'
 
 
 

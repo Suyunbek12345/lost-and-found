@@ -5,14 +5,15 @@ from .models import Advert, Comment, Favorites
 
 
 class AdvertListSerializer(serializers.ModelSerializer):
-    # created_at = serializers.DateTimeField(format='%d/%m/%Y %H:%M:%S')
+    owner = serializers.ReadOnlyField(source='owner.email')
+
     class Meta:
         model = Advert
-        fields = ('id', 'user', 'title', 'description', 'image', 'address')
+        fields = ('id', 'user', 'title', 'description', 'address', 'image')
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['images'] = instance.images.all()
+        representation['images'] = instance.image.all()
 
 
 class AdvertDetailSerializer(serializers.ModelSerializer):
